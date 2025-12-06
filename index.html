@@ -390,7 +390,8 @@ contactForm.addEventListener('submit', async function (e) {
         contactForm.reset();
 
         // Optional: refresh page
-      window.location.reload();
+      setTimeout(() => window.location.reload(), 10000);
+
 
     } catch (err) {
         console.error("Error!", err);
