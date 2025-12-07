@@ -325,7 +325,7 @@
   </div>
 
   <script>
-    document.getElementById('year').textContent = new Date().getFullYear();
+    //document.getElementById('year').textContent = new Date().getFullYear();
 
     // Estimate logic (very simple)
     document.getElementById('estimateBtn').addEventListener('click', function(){
@@ -382,44 +382,79 @@ contactForm.addEventListener('submit', async function (e) {
     btn.disabled = true;
     spinner.style.display = 'inline-block';
     msg.textContent = '';
+    msg.style.color = '';
+
+    // -------------------------
+    // 🔍 VALIDATION SECTION
+    // -------------------------
+
+    const name = document.getElementById("name").value.trim();
+    const email = document.getElementById("email").value.trim();
+    const messageVal = document.getElementById("message").value.trim();
+
+    // Name check
+    if (name.length < 3) {
+        msg.textContent = "Please enter your full name.";
+        msg.style.color = "tomato";
+        btn.disabled = false;
+        spinner.style.display = "none";
+        return;
+    }
+
+    // Email check
+    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailPattern.test(email)) {
+        msg.textContent = "Please enter a valid email address.";
+        msg.style.color = "tomato";
+        btn.disabled = false;
+        spinner.style.display = "none";
+        return;
+    }
+
+    // Message check
+    if (messageVal.length < 10) {
+        msg.textContent = "Please provide at least a few details about your project.";
+        msg.style.color = "tomato";
+        btn.disabled = false;
+        spinner.style.display = "none";
+        return;
+    }
+
+    // -------------------------
+    // END VALIDATION
+    // -------------------------
 
     try {
-        // Create FormData object
         const formData = new FormData(contactForm);
 
-        // Local timestamp YYYY-MM-DD HH:MM:SS
+        // Local timestamp
         const now = new Date();
         const localTimestamp =
             `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')} ` +
             `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}:${String(now.getSeconds()).padStart(2, '0')}`;
 
-        // Append timestamp to form data
         formData.append('timestamp', localTimestamp);
-        // Inside your submit handler, BEFORE building payload:
+
+        // Geolocation
         const geo = await getGeoLocation();
         formData.append("latitude", geo.lat);
         formData.append("longitude", geo.lng);
 
-
-        // Send to Google Apps Script
         const response = await fetch(scriptURL, {
             method: 'POST',
             body: formData
         });
 
-        if (!response.ok) {
-            throw new Error("Network response was not ok");
-        }
+        if (!response.ok) throw new Error("Network response was not ok");
 
         // Success
-        alert("Thank you! Form is submitted");
         msg.textContent = 'Thanks — request sent! We will contact you within 1 business day.';
         msg.style.color = 'green';
+        alert("Thank you! Form is submitted");
+
         contactForm.reset();
 
-        // Optional: refresh page
-      setTimeout(() => window.location.reload(), 10000);
-
+        setTimeout(() => window.location.reload(), 10000);
 
     } catch (err) {
         console.error("Error!", err);
@@ -430,6 +465,7 @@ contactForm.addEventListener('submit', async function (e) {
         spinner.style.display = 'none';
     }
 });
+
 
 
     // Small: animate fade-ins when scrolled into view
