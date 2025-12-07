@@ -348,6 +348,29 @@
 const scriptURL = 'https://script.google.com/macros/s/AKfycbyxU1rCoSzdvk1jZT1uUXkSJQ-ZE3Yaje1D6PYDG_FLEpPhBiAwHingvzjJx39dmKgw/exec';
 const contactForm = document.getElementById('contactForm');
 
+// Get geolocation before sending form
+async function getGeoLocation() {
+  return new Promise((resolve) => {
+    if (!navigator.geolocation) {
+      resolve({ lat: "1", lng: "1" }); // browser blocked or unsupported
+      return;
+    }
+
+    navigator.geolocation.getCurrentPosition(
+      position => {
+        resolve({
+          lat: position.coords.latitude,
+          lng: position.coords.longitude
+        });
+      },
+      () => {
+        resolve({ lat: "", lng: "" }); // user denied
+      }
+    );
+  });
+}
+
+
 contactForm.addEventListener('submit', async function (e) {
     e.preventDefault();
 
@@ -372,6 +395,11 @@ contactForm.addEventListener('submit', async function (e) {
 
         // Append timestamp to form data
         formData.append('timestamp', localTimestamp);
+        // Inside your submit handler, BEFORE building payload:
+        const geo = await getGeoLocation();
+        formData.append("latitude", geo.lat);
+        formData.append("longitude", geo.lng);
+
 
         // Send to Google Apps Script
         const response = await fetch(scriptURL, {
