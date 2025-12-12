@@ -78,6 +78,84 @@
     .popular{position:relative}
     .popular::after{content:"MOST POPULAR";position:absolute;top:-12px;right:-12px;background:var(--accent);color:#021026;padding:6px 8px;border-radius:8px;font-weight:800;font-size:11px}
 
+    .analog-clock {
+      width: 140px;
+      height: 140px;
+      border: 4px solid #000;
+      border-radius: 50%;
+      position: relative;
+      margin: 10px auto;
+      background: white;
+    }
+
+    .analog-clock .hand {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform-origin: 0% 50%;
+      transform: rotate(90deg);
+      border-radius: 4px;
+    }
+
+    /* Hour hand */
+    .analog-clock .hour {
+      width: 35%;
+      height: 6px;
+      background: black;
+    }
+
+    /* Minute hand */
+    .analog-clock .minute {
+      width: 45%;
+      height: 4px;
+      background: black;
+    }
+
+    /* Second hand */
+    .analog-clock .second {
+      width: 48%;
+      height: 2px;
+      background: red;
+    }
+
+
+    .analog-clock .center-dot {
+      width: 10px;
+      height: 10px;
+      background: black;
+      border-radius: 50%;
+      position: absolute;
+      top: calc(50% - 5px);
+      left: calc(50% - 5px);
+    }
+
+    .digital-clock {
+      text-align: center;
+      font-size: 1.1rem;
+      margin-top: 8px;
+      font-weight: 600;
+      color: #faf9f9; 
+      letter-spacing: 1px;
+    }
+
+    /* Roman numerals */
+    .roman {
+      position: absolute;
+      font-size: 15px;
+      font-weight: 700;
+      color: black;
+      transform: translate(-50%, -50%);
+    }
+
+    /* Only the four main markers */
+    .r12 { top: 12%; left: 50%; }
+    .r3  { top: 50%; left: 92%; }
+    .r6  { top: 88%; left: 50%; }
+    .r9  { top: 50%; left: 8%; }
+
+
+
+
   </style>
 </head>
 <body>
@@ -309,8 +387,20 @@
         </ul>
         <div style="margin-top:12px">
           <div style="font-weight:800">Technology</div>
-          <div class="muted">React • Next.js • Node.js • VS Code • Github • Supabase • Flutter • Firebase • Google</div>
+          <div class="muted">React • Next.js • Node.js • VS Code • Github • Supabase • Flutter • Firebase • Google• Meta • Microsoft</div>
         </div>
+         <div class="analog-clock">
+          <!-- Roman Numerals (Only 3, 6, 9, 12) -->
+          <div class="roman r12">XII</div>
+          <div class="roman r3">III</div>
+          <div class="roman r6">VI</div>
+          <div class="roman r9">IX</div>
+          <div class="hand hour"></div>
+          <div class="hand minute"></div>
+          <div class="hand second"></div>
+          <div class="center-dot"></div>
+        </div>
+        <div id="digitalClock" class="digital-clock"></div>
       </aside>
     </section>
 
@@ -475,6 +565,38 @@ contactForm.addEventListener('submit', async function (e) {
 
     // keyboard accessibility: Enter on estimate button
     document.getElementById('estimateBtn').addEventListener('keyup', function(e){ if(e.key === 'Enter') this.click(); });
+
+
+function updateClocks() {
+    const now = new Date();
+
+    const seconds = now.getSeconds();
+    const minutes = now.getMinutes();
+    const hours = now.getHours();
+
+    // Calculate angles
+    const secondDeg = seconds * 6;                     // 360° / 60s
+    const minuteDeg = (minutes * 6) + (seconds * 0.1) - 90; // minute hand moves slightly each second
+    const hourDeg   = (hours % 12) * 30 + (minutes * 0.5) - 90; // hour hand moves gradually each minute
+
+    // Apply rotations
+    document.querySelector('.analog-clock .second').style.transform =
+        `rotate(${secondDeg}deg)`;
+
+    document.querySelector('.analog-clock .minute').style.transform =
+        `rotate(${minuteDeg}deg)`;
+
+    document.querySelector('.analog-clock .hour').style.transform =
+        `rotate(${hourDeg}deg)`;
+
+    // Digital clock
+    document.getElementById('digitalClock').textContent =
+        now.toLocaleTimeString();
+}
+
+// Run instantly, then update every second
+updateClocks();
+setInterval(updateClocks, 1000);
 
 
 
