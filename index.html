@@ -575,7 +575,7 @@ function updateClocks() {
     const hours = now.getHours();
 
     // Calculate angles
-    const secondDeg = seconds * 6;                     // 360° / 60s
+    const secondDeg = seconds * 6 - 90;                     // 360° / 60s
     const minuteDeg = (minutes * 6) + (seconds * 0.1) - 90; // minute hand moves slightly each second
     const hourDeg   = (hours % 12) * 30 + (minutes * 0.5) - 90; // hour hand moves gradually each minute
 
