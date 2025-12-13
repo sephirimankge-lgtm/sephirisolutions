@@ -58,8 +58,32 @@
     footer{margin-top:36px;padding:18px;border-radius:12px;background:linear-gradient(180deg, rgba(255,255,255,0.01), rgba(255,255,255,0.01));display:flex;justify-content:space-between;align-items:center}
 
     /* Responsive */
-    @media (max-width:1000px){.hero{grid-template-columns:1fr 1fr}.grid{grid-template-columns:repeat(2,1fr)}.pricing-grid{grid-template-columns:repeat(2,1fr)}.contact{grid-template-columns:1fr}}
-    @media (max-width:720px){.wrap{padding:16px;margin:16px}nav{display:none}.hero{grid-template-columns:1fr}.grid{grid-template-columns:1fr}.pricing-grid{grid-template-columns:1fr}.contact{grid-template-columns:1fr}.brand .text{display:none}}
+    @media (max-width: 1000px) {
+      .hero { grid-template-columns: 1fr 1fr }
+      .grid { grid-template-columns: repeat(2,1fr) }
+      .pricing-grid { grid-template-columns: repeat(2,1fr) }
+      .contact { grid-template-columns: 1fr }
+
+      /* ✅ Hide desktop nav */
+      nav { display: none; }
+
+      /* ✅ KEEP brand visible */
+      .brand { display: flex; }
+    }
+
+    @media (max-width: 720px) {
+      .wrap { padding: 16px; margin: 16px }
+      .hero { grid-template-columns: 1fr }
+      .grid { grid-template-columns: 1fr }
+      .pricing-grid { grid-template-columns: 1fr }
+
+      /* ✅ KEEP brand visible on small screens */
+      .brand { display: flex; }
+
+      
+      /* .brand .text { display: none } */
+    }
+
 
     /* Utilities */
     .row{display:flex;gap:12px;align-items:center}
@@ -153,6 +177,80 @@
     .r6  { top: 88%; left: 50%; }
     .r9  { top: 50%; left: 8%; }
 
+    /* Mobile menu button */
+    .menu-toggle {
+      display: none;
+      font-size: 26px;
+      background: none;
+      border: 0;
+      color: #fff;
+      cursor: pointer;
+    }
+
+    /* Sidebar */
+    .mobile-menu {
+      position: fixed;
+      top: 0;
+      right: -100%;
+      width: 280px;
+      height: 100%;
+      background: #0b1220;
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      transition: right 0.3s ease;
+      z-index: 1001;
+    }
+
+    .mobile-menu a {
+      color: #e6eef8;
+      text-decoration: none;
+      font-weight: 700;
+    }
+
+    .mobile-menu .cta {
+      margin-top: 12px;
+      text-align: center;
+    }
+
+    /* Close button */
+    .close-menu {
+      align-self: flex-end;
+      font-size: 28px;
+      background: none;
+      border: 0;
+      color: #fff;
+      cursor: pointer;
+    }
+
+    /* Overlay */
+    .menu-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.55);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+      z-index: 1000;
+    }
+
+    /* Active states */
+    .mobile-menu.active {
+      right: 0;
+    }
+
+    .menu-overlay.active {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    /* Mobile only */
+    @media (max-width: 720px) {
+      .menu-toggle {
+        display: block;
+      }
+    }
 
 
 
@@ -169,6 +267,25 @@
         </div>
       </div>
       <nav>
+
+        <!-- Mobile Menu Button -->
+        <button class="menu-toggle" aria-label="Open menu">
+          ☰
+        </button>
+
+        <!-- Mobile Sidebar -->
+        <div class="mobile-menu" id="mobileMenu">
+          <button class="close-menu" aria-label="Close menu">×</button>
+          <a href="#services">Services</a>
+          <a href="#packages">Packages</a>
+          <a href="#work">Work</a>
+          <a href="#contact">Contact</a>
+          <a class="cta" href="#contact">Get a Quote</a>
+        </div>
+
+        <!-- Overlay -->
+        <div class="menu-overlay" id="menuOverlay"></div>
+
         
           <a href="#services">Services</a>
           <a href="#packages">Packages</a>
@@ -597,6 +714,30 @@ function updateClocks() {
 // Run instantly, then update every second
 updateClocks();
 setInterval(updateClocks, 1000);
+
+
+  const menuToggle = document.querySelector('.menu-toggle');
+  const mobileMenu = document.getElementById('mobileMenu');
+  const overlay = document.getElementById('menuOverlay');
+
+  function openMenu() {
+    mobileMenu.classList.add('active');
+    overlay.classList.add('active');
+  }
+
+  function closeMenu() {
+    mobileMenu.classList.remove('active');
+    overlay.classList.remove('active');
+  }
+
+  menuToggle.addEventListener('click', openMenu);
+  overlay.addEventListener('click', closeMenu);
+  document.querySelector('.close-menu').addEventListener('click', closeMenu);
+
+  // Close menu when clicking a link
+  document.querySelectorAll('.mobile-menu a').forEach(link => {
+    link.addEventListener('click', closeMenu);
+  });
 
 
 
