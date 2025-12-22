@@ -347,6 +347,7 @@
           <label>Project type</label>
           <select name="type">
             <option value="website">Website</option>
+            <option value="businesswebsite">Business Website</option>
             <option value="ecommerce">E-commerce</option>
             <option value="webapp">Web App</option>
             <option value="mobile">Mobile App</option>
@@ -556,7 +557,7 @@
     document.getElementById('estimateBtn').addEventListener('click', function(){
       const form = document.getElementById('quickQuote');
       const type = form.type.value; const complexity = form.complexity.value;
-      const base = {website:3500,ecommerce:10500,webapp:20500,mobile:30000}[type] || 3000;
+      const base = {website:3500,businesswebsite:8500,ecommerce:10500,webapp:20500,mobile:30000}[type] || 3000;
       const mult = {basic:1,standard:1.6,complex:2.6}[complexity] || 1;
       const est = Math.round(base * mult / 100) * 100; // round to nearest 100
       document.getElementById('estimateResult').textContent = 'Estimate: R' + est.toLocaleString();
