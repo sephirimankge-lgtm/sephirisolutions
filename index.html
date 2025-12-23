@@ -22,6 +22,10 @@
   <meta property="og:description" content="Websites, Web Apps, Mobile Apps, Maintenance — Packages & Prices available.">
   <meta name="theme-color" content="#0b6cf2">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script>
+  <script src="https://unpkg.com/feather-icons"></script>
+  <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+  <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
   <style>
     :root{
       --bg:#0f1724; --card:#0b1220; --muted:#98a0b3; --accent:#0b6cf2; --glass: rgba(255,255,255,0.04);
@@ -36,7 +40,7 @@
     header{display:flex;align-items:center;justify-content:space-between;gap:16px}
     .brand{display:flex;align-items:center;gap:12px}
     .logo{width:46px;height:46px;border-radius:10px;background:linear-gradient(135deg,var(--accent),#6bc9ff);display:flex;align-items:center;justify-content:center;font-weight:800;color:#021026}
-    nav{display:flex;gap:18px;align-items:center}
+    /*nav{display:flex;gap:18px;align-items:center}*/
     nav a{color:var(--muted);text-decoration:none;font-weight:600}
     .cta{background:var(--accent);color:#04233f;padding:10px 14px;border-radius:10px;text-decoration:none;font-weight:700}
 
@@ -78,7 +82,9 @@
       .contact { grid-template-columns: 1fr }
 
       /* ✅ Hide desktop nav */
-      nav { display: none; }
+      /*  
+      
+      nav { display: none; }*/
 
       /* ✅ KEEP brand visible */
       .brand { display: flex; }
@@ -190,80 +196,59 @@
     .r6  { top: 88%; left: 50%; }
     .r9  { top: 50%; left: 8%; }
 
-    /* Mobile menu button */
-    .menu-toggle {
-      display: none;
-      font-size: 26px;
-      background: none;
-      border: 0;
-      color: #fff;
-      cursor: pointer;
+    /* Desktop nav */
+    .desktop-nav {
+      display: flex;
+      gap: 18px;
+      align-items: center;
     }
 
-    /* Sidebar */
+    .menu-btn {
+      display: none;
+      background: none;
+      border: 0;
+      cursor: pointer;
+      color: #fff;
+    }
+
+    /* Mobile menu panel */
     .mobile-menu {
-      position: fixed;
-      top: 0;
-      right: -100%;
-      width: 280px;
-      height: 100%;
+      display: none;
+      position: absolute;
+      top: 88px;
+      right: 24px;
       background: #0b1220;
-      padding: 24px;
-      display: flex;
-      flex-direction: column;
-      gap: 16px;
-      transition: right 0.3s ease;
-      z-index: 1001;
+      border-radius: 12px;
+      padding: 16px;
+      width: 220px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.5);
     }
 
     .mobile-menu a {
-      color: #e6eef8;
+      display: block;
+      padding: 10px 0;
+      color: var(--muted);
       text-decoration: none;
-      font-weight: 700;
+      font-weight: 600;
     }
 
     .mobile-menu .cta {
-      margin-top: 12px;
+      display: block;
+      margin-top: 10px;
       text-align: center;
     }
 
-    /* Close button */
-    .close-menu {
-      align-self: flex-end;
-      font-size: 28px;
-      background: none;
-      border: 0;
-      color: #fff;
-      cursor: pointer;
-    }
+    /* ---------- RESPONSIVE ---------- */
+    @media (max-width: 1000px) {
+      .desktop-nav {
+        display: none;
+      }
 
-    /* Overlay */
-    .menu-overlay {
-      position: fixed;
-      inset: 0;
-      background: rgba(0,0,0,0.55);
-      opacity: 0;
-      pointer-events: none;
-      transition: opacity 0.3s ease;
-      z-index: 1000;
-    }
-
-    /* Active states */
-    .mobile-menu.active {
-      right: 0;
-    }
-
-    .menu-overlay.active {
-      opacity: 1;
-      pointer-events: auto;
-    }
-
-    /* Mobile only */
-    @media (max-width: 720px) {
-      .menu-toggle {
+      .menu-btn {
         display: block;
       }
     }
+
 
 
 
@@ -284,35 +269,31 @@
           <div class="muted" style="font-size:13px">Web & App Development</div>
         </div>
       </div>
-      <nav>
 
-        <!-- Mobile Menu Button -->
-        <button class="menu-toggle" aria-label="Open menu">
-          ☰
-        </button>
-
-        <!-- Mobile Sidebar -->
-        <div class="mobile-menu" id="mobileMenu">
-          <button class="close-menu" aria-label="Close menu">×</button>
-          <a href="#services">Services</a>
-          <a href="#packages">Packages</a>
-          <a href="#work">Work</a>
-          <a href="#contact">Contact</a>
-          <a class="cta" href="#contact">Get a Quote</a>
-        </div>
-
-        <!-- Overlay -->
-        <div class="menu-overlay" id="menuOverlay"></div>
-
-        
-          <a href="#services">Services</a>
-          <a href="#packages">Packages</a>
-          <a href="#work">Work</a>
-          <a href="#contact">Contact</a>
-          <a class="cta" href="#contact">Get a Quote</a>
-        
+      <!-- Desktop Navigation -->
+      <nav class="desktop-nav">
+        <a href="#services">Services</a>
+        <a href="#packages">Packages</a>
+        <a href="#work">Work</a>
+        <a href="#contact">Contact</a>
+        <a class="cta" href="#contact">Get a Quote</a>
       </nav>
+
+      <!-- Mobile Menu Button -->
+      <button id="menu-btn" class="menu-btn" aria-label="Open menu">
+        <i data-feather="menu"></i>
+      </button>
     </header>
+
+<!-- Mobile Menu -->
+<div id="mobile-menu" class="mobile-menu">
+  <a href="#services">Services</a>
+  <a href="#packages">Packages</a>
+  <a href="#work">Work</a>
+  <a href="#contact">Contact</a>
+  <a class="cta" href="#contact">Get a Quote</a>
+</div>
+
 
     <section class="hero">
       <div>
@@ -735,29 +716,28 @@ updateClocks();
 setInterval(updateClocks, 1000);
 
 
-  const menuToggle = document.querySelector('.menu-toggle');
-  const mobileMenu = document.getElementById('mobileMenu');
-  const overlay = document.getElementById('menuOverlay');
+  // Mobile menu toggle
+        document.getElementById('menu-btn').addEventListener('click', function() {
+            const menu = document.getElementById('mobile-menu');
+            menu.classList.toggle('hidden');
+        });
 
-  function openMenu() {
-    mobileMenu.classList.add('active');
-    overlay.classList.add('active');
-  }
+  feather.replace();
 
-  function closeMenu() {
-    mobileMenu.classList.remove('active');
-    overlay.classList.remove('active');
-  }
+  const menuBtn = document.getElementById('menu-btn');
+  const mobileMenu = document.getElementById('mobile-menu');
 
-  menuToggle.addEventListener('click', openMenu);
-  overlay.addEventListener('click', closeMenu);
-  document.querySelector('.close-menu').addEventListener('click', closeMenu);
-
-  // Close menu when clicking a link
-  document.querySelectorAll('.mobile-menu a').forEach(link => {
-    link.addEventListener('click', closeMenu);
+  menuBtn.addEventListener('click', () => {
+    mobileMenu.style.display =
+      mobileMenu.style.display === 'block' ? 'none' : 'block';
   });
 
+  // Optional: close menu when clicking a link
+  mobileMenu.querySelectorAll('a').forEach(link => {
+    link.addEventListener('click', () => {
+      mobileMenu.style.display = 'none';
+    });
+  });
 
 
   </script>
