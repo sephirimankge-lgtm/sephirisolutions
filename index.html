@@ -249,6 +249,27 @@
       }
     }
 
+    .radio-player {
+      margin-top: 16px;
+      text-align: center;
+    }
+
+    .radio-title {
+      font-weight: 800;
+      margin-bottom: 6px;
+    }
+
+    .radio-player audio {
+      width: 100%;
+      border-radius: 10px;
+    }
+
+    .radio-note {
+      font-size: 12px;
+      margin-top: 6px;
+    }
+
+
 
 
 
@@ -518,6 +539,35 @@
           <div class="center-dot"></div>
         </div>
         <div id="digitalClock" class="digital-clock"></div>
+
+       <!-- SA Radio Player -->
+<div class="radio-player">
+  <div class="radio-title">🎧 Radio Live</div>
+
+<select id="radioSelect" onchange="changeStation(this.value)">
+    <option value="https://cors.isomorphic-git.org/https://tunein.streamguys1.com/metrofm">
+    Metro FM
+    </option>
+
+
+  </select>
+
+
+
+ <audio controls preload="none">
+  <source src="https://playerservices.streamtheworld.com/api/livestream-redirect/METROFMAAC.aac?dist=" type="audio/aac">
+  Your browser does not support the audio element.
+</audio>
+
+
+  <div class="radio-note muted">
+    Click 🔊 to unmute if sound does not start automatically
+  </div>
+</div>
+
+
+
+
       </aside>
     </section>
 
@@ -739,7 +789,28 @@ setInterval(updateClocks, 1000);
     });
   });
 
+    function changeStation(url) {
+    if (!url) return;
 
+    const radio = document.getElementById('saRadio');
+    const source = document.getElementById('radioSource');
+
+    // Fully reset
+    radio.pause();
+    source.src = "";
+    radio.load();
+
+    // Assign new stream
+    source.src = url;
+    radio.load();
+
+    // Must be user-triggered (select change = OK)
+    radio.play().catch(err => {
+      console.warn("Playback blocked:", err);
+    });
+  }
+
+    
   </script>
 </body>
 </html>
